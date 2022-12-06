@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/utils/http/core/error.dart';
 import 'package:learn_flutter/utils/http/core/net.dart';
 import 'package:learn_flutter/utils/http/request/test_request.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -33,13 +34,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _counter = 0;
 
-  void _incrementCounter() {
+  void _incrementCounter() async {
     TestRequest request = TestRequest();
     request.add("k", "v");
-    var result = Net.shared()?.fire(request);
-    print(result);
+    if (kDebugMode) {
+      try {
+        var result = await Net.shared()?.fire(request);
+        print(result);
+      } on NeedAuth catch (e) {
+        print(e);
+      } on NeedLogin catch (e) {
+        print(e);
+      } on NetError catch (e) {
+        print(e);
+      }
+    }
   }
 
   @override
