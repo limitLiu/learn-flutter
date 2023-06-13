@@ -137,12 +137,147 @@ class PaperPainter extends CustomPainter {
     canvas.restore();
 
     _drawPoints(canvas);
+    _drawLines(canvas);
+    _drawPolygon(canvas);
+    _drawAxis(canvas, size);
+
+    _drawRect(canvas);
+    _drawRRect(canvas);
+    _drawDRRect(canvas);
+  }
+
+  void _drawDRRect(Canvas canvas) {
+    _paint
+      ..color = Colors.blue
+      ..strokeWidth = 1.5;
+
+    const orign = Offset(0, 0);
+    final outRect = Rect.fromCenter(center: orign, width: 100, height: 100);
+    final inner = Rect.fromCenter(center: orign, width: 80, height: 80);
+    canvas.drawDRRect(RRect.fromRectXY(outRect, 20, 20),
+        RRect.fromRectXY(inner, 10, 10), _paint);
+
+    final outRect1 = Rect.fromCenter(center: orign, width: 60, height: 60);
+    final inner1 = Rect.fromCenter(center: orign, width: 40, height: 40);
+    canvas.drawDRRect(RRect.fromRectXY(outRect1, 20, 20),
+        RRect.fromRectXY(inner1, 10, 10), _paint..color = Colors.green);
+  }
+
+  void _drawAxis(Canvas canvas, Size size) {
+    _paint
+      ..color = Colors.blue
+      ..strokeWidth = 1.5;
+    canvas.drawLine(
+      Offset(-size.width / 2, 0),
+      Offset(size.width / 2, 0),
+      _paint,
+    );
+    canvas.drawLine(
+      Offset(0, -size.height / 2),
+      Offset(0, size.height / 2),
+      _paint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height / 2),
+      Offset(-7, size.height / 2 - 10),
+      _paint,
+    );
+
+    canvas.drawLine(
+      Offset(0, size.height / 2),
+      Offset(7, size.height / 2 - 10),
+      _paint,
+    );
+
+    canvas.drawLine(
+      Offset(size.width / 2, 0),
+      Offset(size.width / 2 - 10, -7),
+      _paint,
+    );
+
+    canvas.drawLine(
+      Offset(size.width / 2, 0),
+      Offset(size.width / 2 - 10, 7),
+      _paint,
+    );
+  }
+
+  void _drawRRect(Canvas canvas) {
+    _paint
+      ..color = Colors.amber
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 1.5;
+    final rect =
+        Rect.fromCenter(center: const Offset(0, 0), width: 120, height: 120);
+    canvas.drawRRect(RRect.fromRectXY(rect, 40, 20), _paint);
+
+    canvas.drawRRect(const RRect.fromLTRBXY(-120, -120, -60, -60, 20, 10),
+        _paint..color = Colors.cyan);
+
+    canvas.drawRRect(
+        RRect.fromLTRBR(60, 60, 120, 120, const Radius.circular(10)),
+        _paint..color = Colors.teal);
+
+    canvas.drawRRect(
+      RRect.fromLTRBAndCorners(-60, 60, -120, 120,
+          bottomRight: const Radius.elliptical(10, 10)),
+      _paint..color = Colors.red,
+    );
+
+    final rectPoint =
+        Rect.fromPoints(const Offset(60, -60), const Offset(120, -120));
+    canvas.drawRRect(
+        RRect.fromRectAndCorners(rectPoint,
+            bottomLeft: const Radius.elliptical(10, 10)),
+        _paint..color = Colors.pink);
+  }
+
+  void _drawRect(Canvas canvas) {
+    _paint
+      ..color = Colors.blue
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 1.5;
+    final rect =
+        Rect.fromCenter(center: const Offset(0, 0), width: 120, height: 120);
+    canvas.drawRect(rect, _paint);
+    const rectLTRB = Rect.fromLTRB(-120, -120, -60, -60);
+    canvas.drawRect(rectLTRB, _paint..color = Colors.red);
+
+    const rectLTWH = Rect.fromLTWH(60, 60, 60, 60);
+    canvas.drawRect(rectLTWH, _paint..color = Colors.pink);
+
+    final rectCircle =
+        Rect.fromCircle(center: const Offset(-90, 90), radius: 30);
+    canvas.drawRect(rectCircle, _paint..color = Colors.cyan);
+    final rectPoint =
+        Rect.fromPoints(const Offset(60, -60), const Offset(120, -120));
+    canvas.drawRect(rectPoint, _paint..color = Colors.teal);
+  }
+
+  void _drawPolygon(Canvas canvas) {
+    _paint
+      ..invertColors = false
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round;
+    canvas.drawPoints(PointMode.polygon, points, _paint);
+  }
+
+  _drawLines(Canvas canvas) {
+    _paint
+      ..invertColors = false
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round;
+    canvas.drawPoints(PointMode.lines, points, _paint);
   }
 
   _drawPoints(Canvas canvas) {
     _paint
       ..invertColors = false
-      ..color = Colors.red
+      ..color = Colors.blue
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10
       ..strokeCap = StrokeCap.round;
